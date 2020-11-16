@@ -1,0 +1,6 @@
+Oh My Zsh Config
+- Custom
+  - plugins
+    - alias-tips - https://github.com/djui/alias-tips
+  - themes
+    - powerlevel10k - https://github.com/romkatv/powerlevel10k
