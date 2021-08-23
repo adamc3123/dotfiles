@@ -18,6 +18,11 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'mhartington/oceanic-next'
+Plug 'psliwka/vim-smoothie'
+Plug 'tpope/vim-fugitive'
+Plug 'thaerkh/vim-workspace'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'vim-airline/vim-airline'
 call plug#end()
 
 if (has("termguicolors"))
@@ -90,6 +95,15 @@ let g:NERDTreeDirArrowCollapsible = '▾'
 " If more than one window and previous buffer was NERDTree, go back to it.
 "autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
 
+"
+" vim-workspace specific
+"
+let g:workspace_autosave = 0
+
+"
+" vim-airline specific
+"
+let g:airline#extensions#tabline#enabled = 1
 
 "
 " Code snippets
