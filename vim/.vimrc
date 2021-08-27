@@ -1,10 +1,11 @@
 "
 " SETUP
-" - Create a '.swaps' directory in .vim
-" - Follow installation steps at https://github.com/junegunn/vim-plug
-"
-" Use '==' to automatically indent single lines or visual blocks
-"
+"   - Install neovim
+"   - Create a '.swaps' directory in .vim
+"   - Follow installation steps at https://github.com/junegunn/vim-plug
+"   - Create environment variables:
+"     - $RUBOCOP_YML - Path to rubocop config file
+"     - $PROJECT_SRC_DIRS - Paths to project directories for search
 "
 
 "
@@ -28,6 +29,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'vim-ruby/vim-ruby'
 Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'yggdroot/indentline'
 call plug#end()
 
 if (has("termguicolors"))
@@ -43,25 +45,29 @@ syntax on               " Syntax highlighting
 
 set mouse=a             " Enable mouse support
 
-set wildmenu		    " autocomplete command menu
+set wildmenu		    " Autocomplete command menu
 
 set nocompatible
 
 set tabstop=4		    " 4 spaces per tab
-set expandtab		    " tabs are spaces
+set expandtab		    " Tabs are spaces
 set shiftwidth=4
 set nowrap
 
-set incsearch		    " search as typing
-set hlsearch		    " highlight matches
-set ignorecase		    " search case insensitive
-set smartcase		    " allow uppercase search
+set incsearch		    " Search as typing
+set hlsearch		    " Highlight matches
+set ignorecase		    " Search case insensitive
+set smartcase		    " Allow uppercase search
+
+set hidden              " Allow hidden unsaved buffers
 
 let mapleader=" "       " Use space as the leader key
 
 set updatetime=500      " Lower update time for vim-gitgutter
 
-set signcolumn=yes:2   " Show 2 rows in the gutter
+if (has("nvim"))
+  set signcolumn=yes:2   " Show 2 rows in the gutter
+endif
 
 set clipboard+=unnamedplus  " Copy to system clipboard
 
@@ -102,9 +108,6 @@ map <leader>r :NERDTreeFind<CR>
 
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif   " Exit if NERDTree is last window open
-" If more than one window and previous buffer was NERDTree, go back to it.
-"autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
 
 "
 " vim-workspace specific
@@ -121,12 +124,15 @@ let g:airline#extensions#tabline#enabled = 1
 "
 let $FZF_DEFAULT_COMMAND='rg --files -u'
 " Search for word under cursor
-nnoremap <leader>F :Rg <C-R><C-W><CR>
+nnoremap <leader>F :Rgp <C-R><C-W><CR>
 nnoremap <leader>f :Files<Cr>
 nnoremap <leader>b :Buffers<Cr>
 nnoremap <leader>h :History:<Cr>
 "nnoremap <leader>F :Rg <C-R>"<CR>           " Search for yanked phrase
-
+command! -bang -nargs=* Rgp
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case  -- '.shellescape(<q-args>).' $PROJECT_SRC_DIRS', 1,
+  \   fzf#vim#with_preview(), <bang>0)
 
 "
 " CtrlP specific
@@ -150,6 +156,10 @@ let g:ale_lint_on_enter = 0                 " Don't lint on open
 let g:ale_ruby_rubocop_options = "--config $RUBOCOP_YML"
 let g:ale_sign_error = '!!'
 let g:ale_sign_warning = '--'
+
+"
+" coc.nvim Specific
+"
 
 "
 " Code snippets
