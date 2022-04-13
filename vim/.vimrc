@@ -5,7 +5,6 @@
 "   - Follow installation steps at https://github.com/junegunn/vim-plug
 "   - Create environment variables:
 "     - $RUBOCOP_YML - Path to rubocop config file
-"     - $PROJECT_SRC_DIRS - Paths to project directories for search
 "
 
 "
@@ -18,11 +17,11 @@ Plug 'tpope/vim-endwise'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'joshdick/onedark.vim'
-Plug 'mhartington/oceanic-next'
+"Plug 'mhartington/oceanic-next'
 Plug 'psliwka/vim-smoothie'
 Plug 'tpope/vim-fugitive'
 Plug 'thaerkh/vim-workspace'
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'jiangmiao/auto-pairs'
 Plug 'airblade/vim-gitgutter'
@@ -30,14 +29,33 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'yggdroot/indentline'
+Plug 'morhetz/gruvbox'
+"Plug 'tomasr/molokai'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope-project.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+"Plug 'airblade/vim-rooter'
 call plug#end()
+
+:lua << EOF
+require('telescope').setup {
+    extensions = {
+        project = {
+            hidden_files = false
+        }
+    }
+}
+require('telescope').load_extension('fzf')
+require('telescope').load_extension('project')
+EOF
 
 if (has("termguicolors"))
   set termguicolors
  endif
 
 colorscheme onedark
-"colorscheme elflord
+"colorscheme gruvbox
 
 set number              " Show line number
 
@@ -86,7 +104,7 @@ filetype plugin indent on
 autocmd FileType javascript setlocal expandtab shiftwidth=2 tabstop=2
 
 "
-" Highlights bad whitespace red
+" Highlight extra whitespace
 "
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
@@ -94,6 +112,12 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+
+"
+" Read vimrc in the current directory to support project specific config
+"
+set exrc
+set secure
 
 "
 " NERDTree specific
@@ -117,33 +141,22 @@ let g:workspace_autosave = 0
 "
 " vim-airline specific
 "
-let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 0
 
 "
 " fzf.vim specific
 "
-let $FZF_DEFAULT_COMMAND='rg --files -u'
+" NOTE: Project specific fzf commands are in <project_directory>/.nvimrc
+"
 " Search for word under cursor
-nnoremap <leader>F :Rgp <C-R><C-W><CR>
-nnoremap <leader>f :Files<Cr>
-nnoremap <leader>b :Buffers<Cr>
-nnoremap <leader>h :History:<Cr>
-"nnoremap <leader>F :Rg <C-R>"<CR>           " Search for yanked phrase
-command! -bang -nargs=* Rgp
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case  -- '.shellescape(<q-args>).' $PROJECT_SRC_DIRS', 1,
-  \   fzf#vim#with_preview(), <bang>0)
-
-"
-" CtrlP specific
-"
-let g:ctrlp_user_command = 'rg --files -u %s'
-nnoremap <leader>p :CtrlPMixed<CR>
+"nnoremap <leader>F :Rg <C-R><C-W><CR>
+"nnoremap <leader>f :Files<Cr>
+"nnoremap <leader>b :Buffers<Cr>
+"nnoremap <leader>h :History:<Cr>
 
 "
 " Ale specific
-" NOTE: Need to install rubocop-performance and rubocop-rails for rubocop to
-" work
+" NOTE: Need to install rubocop-performance and rubocop-rails for rubocop to work
 "
 let g:ale_linters = {
 \   'javascript': ['jshint'],
@@ -156,10 +169,7 @@ let g:ale_lint_on_enter = 0                 " Don't lint on open
 let g:ale_ruby_rubocop_options = "--config $RUBOCOP_YML"
 let g:ale_sign_error = '!!'
 let g:ale_sign_warning = '--'
-
-"
-" coc.nvim Specific
-"
+highlight ALEWarning cterm=underline ctermfg=173 gui=underline guifg=#D19A66
 
 "
 " Code snippets
@@ -175,4 +185,44 @@ nnoremap ,rcom :-1read $HOME/.vim/snippets/ruby_comment.txt<CR>1ja
 
 " go to previous buffer and close the current buffer
 nnoremap bdc :b#\|bd #<CR>
+
+
+" Interactively delete buffers
+" Open with :BD. Use tab to select multiple buffers to delete
+" https://github.com/junegunn/fzf.vim/pull/733
+"
+function! s:list_buffers()
+  redir => list
+  silent ls
+  redir END
+  return split(list, "\n")
+endfunction
+
+function! s:delete_buffers(lines)
+  execute 'bdelete' join(map(a:lines, {_, line -> split(line)[0]}))
+endfunction
+
+command! BD call fzf#run(fzf#wrap({
+  \ 'source': s:list_buffers(),
+  \ 'sink*': { lines -> s:delete_buffers(lines) },
+  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
+\ }))
+
+"
+" Copy filename to the clipboard
+"
+nnoremap <leader>cp :let @+ = expand("%")<cr>
+
+
+"
+" Telescope
+"
+nnoremap <leader>f <cmd>Telescope find_files<cr>
+nnoremap <leader>g <cmd>Telescope live_grep<cr>
+" Grep for string under the cursor
+nnoremap <leader>F <cmd>Telescope grep_string<cr>
+nnoremap <leader>b <cmd>Telescope buffers<cr>
+nnoremap <leader>h <cmd>Telescope command_history<cr>
+nnoremap <leader>t <cmd>Telescope help_tags<cr>
+nnoremap <leader>p <cmd>Telescope project<cr>
 
