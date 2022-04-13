@@ -45,6 +45,8 @@ yank the text in Visual mode. The text will then be in the system clipboard.
 <leader>f       File search
 <leader>b       Buffer search
 <leader>h       Command history search
+CTRL-X          Open in a new split (While in the finder window)
+CTRL-V          Open in a new vertical split (While in the finder window)
 
 ## Coc.nvim
 CTRL-n          Scroll down in selection window
@@ -52,6 +54,9 @@ CTRL-p          Scroll up in selection window
 
 ## Source the current file
 :source %
+
+## vim-workspace
+:CloseHiddenBuffers     Closes all buffers except the current buffer
 
 ## Tips
 ==              Use to indent a single line or visual block
