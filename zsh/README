@@ -1,10 +1,10 @@
 Oh My Zsh Config
 - Install Oh My Zsh (https://github.com/ohmyzsh/ohmyzsh)
-- Run `p10k configure` to install font
 - Install plugins and themes
   - Custom
     - plugins
       - alias-tips (https://github.com/djui/alias-tips)
     - themes
       - powerlevel10k (https://github.com/romkatv/powerlevel10k)
+- Run `p10k configure` to install font
 
