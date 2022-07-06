@@ -172,6 +172,18 @@ let g:ale_sign_warning = '--'
 highlight ALEWarning cterm=underline ctermfg=173 gui=underline guifg=#D19A66
 
 "
+" Telescope
+"
+nnoremap <leader>f <cmd>Telescope find_files<cr>
+nnoremap <leader>g <cmd>Telescope live_grep<cr>
+" Grep for string under the cursor
+nnoremap <leader>F <cmd>Telescope grep_string<cr>
+nnoremap <leader>b <cmd>:lua require('telescope.builtin').buffers({sort_mru = true})<cr>
+nnoremap <leader>h <cmd>Telescope command_history<cr>
+nnoremap <leader>t <cmd>Telescope help_tags<cr>
+nnoremap <leader>p <cmd>Telescope project<cr>
+
+"
 " Code snippets
 "
 
@@ -184,7 +196,7 @@ nnoremap ,rcom :-1read $HOME/.vim/snippets/ruby_comment.txt<CR>1ja
 "
 
 " go to previous buffer and close the current buffer
-nnoremap bdc :b#\|bd #<CR>
+"nnoremap bdc :b#\|bd #<CR>
 
 
 " Interactively delete buffers
@@ -213,16 +225,12 @@ command! BD call fzf#run(fzf#wrap({
 "
 nnoremap <leader>cp :let @+ = expand("%")<cr>
 
-
-"
-" Telescope
-"
-nnoremap <leader>f <cmd>Telescope find_files<cr>
-nnoremap <leader>g <cmd>Telescope live_grep<cr>
-" Grep for string under the cursor
-nnoremap <leader>F <cmd>Telescope grep_string<cr>
-nnoremap <leader>b <cmd>Telescope buffers<cr>
-nnoremap <leader>h <cmd>Telescope command_history<cr>
-nnoremap <leader>t <cmd>Telescope help_tags<cr>
-nnoremap <leader>p <cmd>Telescope project<cr>
-
+" Create a scratch buffer with :Scratch
+function! Scratch()
+    split
+    noswapfile hide enew
+    setlocal buftype=nofile
+    setlocal bufhidden=hide
+    file scratch
+endfunction
+command! -bar -nargs=* Scratch call Scratch()
