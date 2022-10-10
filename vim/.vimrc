@@ -28,14 +28,15 @@ Plug 'airblade/vim-gitgutter'
 Plug 'vim-ruby/vim-ruby'
 Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'yggdroot/indentline'
+"Plug 'yggdroot/indentline'
 Plug 'morhetz/gruvbox'
 "Plug 'tomasr/molokai'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-"Plug 'airblade/vim-rooter'
+"Plug 'airblade/vim-rooter
+Plug 'lukas-reineke/indent-blankline.nvim'
 call plug#end()
 
 :lua << EOF
@@ -54,10 +55,11 @@ if (has("termguicolors"))
   set termguicolors
  endif
 
-colorscheme onedark
-"colorscheme gruvbox
+"colorscheme onedark
+colorscheme gruvbox
 
-set number              " Show line number
+set number              " Show current line number
+set relativenumber      " Show relative line numbers
 
 syntax on               " Syntax highlighting
 
@@ -67,9 +69,9 @@ set wildmenu		    " Autocomplete command menu
 
 set nocompatible
 
-set tabstop=4		    " 4 spaces per tab
+set tabstop=2		    " 2 spaces per tab
 set expandtab		    " Tabs are spaces
-set shiftwidth=4
+set shiftwidth=2
 set nowrap
 
 set incsearch		    " Search as typing
@@ -102,6 +104,11 @@ set directory^=$HOME/.vim/.swaps//      " Common .swp file location
 "
 filetype plugin indent on
 autocmd FileType javascript setlocal expandtab shiftwidth=2 tabstop=2
+
+"
+" Recognize handlebar files at html
+"
+autocmd BufEnter *.hbs :setlocal filetype=html
 
 "
 " Highlight extra whitespace
@@ -159,7 +166,7 @@ let g:airline#extensions#tabline#enabled = 0
 " NOTE: Need to install rubocop-performance and rubocop-rails for rubocop to work
 "
 let g:ale_linters = {
-\   'javascript': ['jshint'],
+\   'javascript': ['eslint'],
 \   'ruby': ['rubocop'],
 \}
 let g:ale_linters_explicit = 1              " Only run linters named in ale_linters settings.
@@ -182,6 +189,11 @@ nnoremap <leader>b <cmd>:lua require('telescope.builtin').buffers({sort_mru = tr
 nnoremap <leader>h <cmd>Telescope command_history<cr>
 nnoremap <leader>t <cmd>Telescope help_tags<cr>
 nnoremap <leader>p <cmd>Telescope project<cr>
+
+"
+" coc.nvim
+"
+let g:coc_global_extensions = ['coc-tsserver', 'coc-solargraph', 'coc-css']
 
 "
 " Code snippets

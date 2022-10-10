@@ -36,9 +36,6 @@ yank the text in Visual mode. The text will then be in the system clipboard.
 :G blame        View git blame for the file
 :G blame o      View commit changes
 
-## CtrlP
-<leader>p       Mixed search (buffers, files, MRU)
-
 ## FZF
 :Rgp            Global Project search ($PROJECT_SRC_DIRS)
 <leader>F       Global Project search (calls :Rgp)
@@ -52,6 +49,9 @@ CTRL-V          Open in a new vertical split (While in the finder window)
 CTRL-n          Scroll down in selection window
 CTRL-p          Scroll up in selection window
 
+## Telescope
+?               Show available commands while in normal mode
+
 ## Source the current file
 :source %
 
@@ -59,8 +59,8 @@ CTRL-p          Scroll up in selection window
 :CloseHiddenBuffers     Closes all buffers except the current buffer
 
 ## Tips
-==              Use to indent a single line or visual block
-
+==              Auto indent a single line or visual block
+=ap             Auto indent the paragraph
 ~               Switch case of the character under the cursor
 {Visual}U       Switch case of highlighted text
-
+:vnew           Open a new vertial split window
