@@ -5,6 +5,14 @@ Vim/Neovim cheatsheet
 CTRL-]          Follow a link
 CTRL-t          Go back
 
+## Scrolling/motion
+w               words forward
+e               forward to the end of a word
+b               backward to the start of a word
+z.              Center cusor in middle of the screen
+{               Paragraphs forward
+}               Paragraphs backward
+
 ## Windows
 CTRL-w k        Select the window to the top
 CTRL-w j        Select the window to the bottom
@@ -18,6 +26,7 @@ CTRL-w H        Move the current window to the far left
 CTRL-w L        Move the current window to the far right
 
 CTRL-w =        Make all windows equal in height and width
+CTRL-w |        Make current window very wide
 
 ## Search command history
 q:                          Open command history in a window
@@ -26,6 +35,9 @@ q:                          Open command history in a window
 
 ## Copy to system clipboard
 yank the text in Visual mode. The text will then be in the system clipboard.
+
+## Working with files
+:f              Show the filename for the current buffer
 
 ## Gitgutter
 <leader>hp      hunk preview
