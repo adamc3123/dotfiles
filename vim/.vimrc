@@ -39,6 +39,7 @@ Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 "Plug 'airblade/vim-rooter
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'ggandor/leap.nvim'
 call plug#end()
 
 :lua << EOF
@@ -51,6 +52,8 @@ require('telescope').setup {
 }
 require('telescope').load_extension('fzf')
 require('telescope').load_extension('project')
+
+require('leap').add_default_mappings()
 EOF
 
 if (has("termguicolors"))
