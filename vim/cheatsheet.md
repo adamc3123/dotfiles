@@ -34,7 +34,7 @@ q:                          Open command history in a window
 :History: OR <leader>h      Open command history in FZF preview window
 
 ## Copy to system clipboard
-yank the text in Visual mode. The text will then be in the system clipboard.
+yank in Visual mode will copy to the system clipboard.
 
 ## Working with files
 :f              Show the filename for the current buffer
@@ -47,32 +47,58 @@ yank the text in Visual mode. The text will then be in the system clipboard.
 ## Fugitive
 :G blame        View git blame for the file
 :G blame o      View commit changes
-
-## FZF
-:Rgp            Global Project search ($PROJECT_SRC_DIRS)
-<leader>F       Global Project search (calls :Rgp)
-<leader>f       File search
-<leader>b       Buffer search
-<leader>h       Command history search
-CTRL-X          Open in a new split (While in the finder window)
-CTRL-V          Open in a new vertical split (While in the finder window)
+:GBrowse        View file/commit/PR in Github (Can also use this after selection in visual mode)
 
 ## Coc.nvim
 CTRL-n          Scroll down in selection window
 CTRL-p          Scroll up in selection window
+TAB             Confirm completion
+gd              Go to definition (C-o to go back)
+gr              Go to or view references (C-o to go back)
+K               View documentation for symbol under cursor
+CTRL-space      Trigger completion
 
 ## Telescope
+### Pickers + shortcuts
+<leader>f             File search
+<leader>g             Grep
+<leader>F             Find word under the cursor
+<leader>b             Buffer search
+<leader>ch            Command history search
+<leader>t             Search help tags
+<leader>p             Search projects
+:Telescope oldfiles   Search old files
+
+### Picker options
+CTRL-X          Open in a new split (While in the finder window)
+CTRL-V          Open in a new vertical split (While in the finder window)
 ?               Show available commands while in normal mode
+CTRL-?          Show available commands while in insert mode
+M-q             Send selected to quickfix list (Select with tab)
+
+### Telescope live grep picker (<leader>g)
+Can pass arguments directly to rg when using the live grep picker
+CTRL-k          Quote the current text (can then add rg options)
+CTRL-i          Quote the current text and add option to search for case-insensitve glob
+CTRL-t          Quote the current text and add option to search for file type (ruby haml js ts)
 
 ## Source the current file
 :source %
 
 ## vim-workspace
 :CloseHiddenBuffers     Closes all buffers except the current buffer
+:ToggleWorkspace        Create a workspace session. Remembers current buffers and layout
+
+## NERDTree
+<leader>-       Open or close the NERDTree directory tree
+<leader>r       Open the current file in the NERDTree directory tree
 
 ## Tips
-==              Auto indent a single line or visual block
-=ap             Auto indent the paragraph
-~               Switch case of the character under the cursor
-{Visual}U       Switch case of highlighted text
-:vnew           Open a new vertial split window
+==                        Auto indent a single line or visual block
+=ap                       Auto indent the paragraph
+~                         Switch case of the character under the cursor
+{Visual}U                 Switch case of highlighted text
+:vnew                     Open a new vertial split window
+gt                        Same as :tabnext
+gT                        Same as :tabnext
+:verbose imap <command>   **Search for mappings (Ex: <leader>h). Helpful for determining if a mapping is in use

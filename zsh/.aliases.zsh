@@ -7,4 +7,4 @@ alias grep='grep --color=auto'
 #
 # git
 #
-alias undo_commit_save_changes='git reset HEAD^'
+alias undo_commit_save_changes='git reset "HEAD^"'
